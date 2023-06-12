@@ -1,1 +1,107 @@
-
+import java.util.*;
+public class Main{
+  
+	public static void main(String[] args) {
+	  
+	    Scanner scanner = new Scanner(System.in);
+	  String rooms, numberofperson,stay, roomtype, 
+	  arrival, departure, Fname, Lname, Mnum, address, deluxe, premier, executive,room;
+	  
+	  
+	    System.out.println("\n_^---*---*---*---*---*---*^_");
+		System.out.println("\nWELCOME TO OOParadise HOTEL");
+		 System.out.println("\n_v*---*---*---*---*---*---*v_");
+		System.out.println("Open for reservation... \n");
+	    
+	    System.out.println("We Offer the following rooms");
+	    System.out.println("*Deluxe   *Premier   *Executive \n");
+	    System.out.println("Just press ENTER to see Inclusions/Amenities...");
+	    scanner.nextLine();
+	    System.out.println("**DELUXE**");
+	    System.out.println("The air-conditioned room features panoramic views of the golf-course. ");
+	    System.out.println("Room Amenities: Room service, Hot&Cold Shower, Mini Bar.\n");
+	    System.out.println("**PREMIER**");
+	    System.out.println("These rooms offer great views of the Laguna pool and surrounding golf course.");
+        System.out.println("Room Amenities: Room service, Hot&Cold Shower, Mini Bar.\n");
+        System.out.println("**EXECUTIVE**");
+	    System.out.println("Our Executive Suite is located near the lobby, restaurant, swimming pool and the resort’s main gate.");
+        System.out.println("Room Amenities: Room service, Hot&Cold Shower, Mini Bar.");
+        
+	    System.out.println("\nJust press ENTER for Reservation...");
+	    scanner.nextLine();
+	    
+	    System.out.print("Chosen Room:  ");
+	    rooms = scanner.nextLine();
+	    System.out.print("Number of room/s to be reserve:  ");
+	    roomtype = scanner.nextLine();
+	    System.out.print("Number of person:  ");
+	    numberofperson = scanner.nextLine();
+	    System.out.print("Expected date of arrival(mm/dd):  ");
+	    arrival = scanner.nextLine();
+	    System.out.print("Expected date of departure(mm/dd):  ");
+	    departure = scanner.nextLine();
+	    
+	    System.out.println("\nTo confirm booking, Please give the all the information needed below:  ");
+	    
+	    System.out.print("\nFirst Name:  ");
+	    Fname = scanner.nextLine();
+	    System.out.print("Last Name:  ");
+	    Lname = scanner.nextLine();
+	    System.out.print("Mobile Number:  ");
+	    Mnum = scanner.nextLine();
+	    System.out.print("Address:  ");
+	    address = scanner.nextLine();
+	    
+                
+                
+                System.out.print("\n--Room Reservation Details--");
+                
+                System.out.println("\nRoom Type:  " + rooms);
+                System.out.println("Number of reserved room " + roomtype);
+                System.out.println("Pax of  " + numberofperson);
+                System.out.println("Date of Arrival " + arrival + ", 2023");
+                System.out.println("Date of Departure " + departure + ", 2023");
+            
+                System.out.println("\n--Custumer Details--");
+                System.out.println("\nName:  " + Fname + Lname);
+	            System.out.println("Mobile Number:  " + Mnum);
+	            System.out.println("Address:  " + address);
+	            
+	          
+	        switch (rooms){
+            case "Deluxe": case "deluxe":
+                System.out.print("Total amount: 2000");
+                String name = scanner.nextLine();
+              
+            break;
+            case "Premier": case "premier":
+                System.out.println("Total amount: 3000");
+                break;
+            case "Executive": case "executive":
+                System.out.println("Total amount: 4000");
+                break;
+            default:
+                System.out.println("  ");
+            
+	        }
+                
+        System.out.println("\nType 'Yes' for Payment Details");
+        System.out.println("Type 'No' to Cancel");
+        String input = scanner.nextLine();
+        
+        switch (input){
+            case "Yes": case "yes":
+                System.out.print("\n Choose mode of payment... ");
+               
+               //not my part...will continue by other groupmates
+            break;
+            case "No": case "no":
+                System.out.println("Thank you for visiting our site!!");
+                 System.exit(0);
+                break;
+            default:
+                System.exit(0);
+                break;
+        }
+    }
+}
