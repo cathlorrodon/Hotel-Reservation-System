@@ -1,1 +1,49 @@
+import java.util.Scanner;
 
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("TRANSACTION");
+        System.out.println("Select mode of payment:");
+        System.out.println("1. Gcash");
+        System.out.println("2. Paymaya");
+        System.out.println("3. CrediCard");
+
+        int choice = scanner.nextInt();
+
+        switch (choice) {
+            case 1:
+                performOption1();
+                break;
+            case 2:
+                performOption2();
+                break;
+            case 3:
+                performOption3();
+                break;
+            default:
+                System.out.println("Invalid choice.");
+        }
+
+        scanner.close();
+    }
+
+    private static void performOption1() {
+        System.out.println("Enter your Gcash Acc: ");
+        System.out.println("Enter Amount: ");
+       
+    }
+
+    private static void performOption2() {
+        System.out.println("Enter Paymaya Acc");
+        System.out.println("Enter Amount ");
+       
+    }
+
+    private static void performOption3() {
+        System.out.println("Enter Acc");
+        System.out.println("Enter Amount");
+    
+    }
+}
