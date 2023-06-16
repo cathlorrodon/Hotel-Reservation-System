@@ -1,49 +1,47 @@
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        
+        // Simulating GCash payment
+
         System.out.println("TRANSACTION");
         System.out.println("Select mode of payment:");
         System.out.println("1. Gcash");
         System.out.println("2. Paymaya");
         System.out.println("3. CrediCard");
 
-        int choice = scanner.nextInt();
 
-        switch (choice) {
-            case 1:
-                performOption1();
-                break;
-            case 2:
-                performOption2();
-                break;
-            case 3:
-                performOption3();
-                break;
-            default:
-                System.out.println("Invalid choice.");
+        // Prompt user for payment details
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the amount to be paid: ");
+        double amount = scanner.nextDouble();
+        scanner.nextLine(); // Consume the newline character
+
+        System.out.print("Enter your GCash mobile number: ");
+        String mobileNumber = scanner.nextLine();
+
+        System.out.print("Enter your GCash PIN: ");
+        String pin = scanner.nextLine();
+ 
+        boolean paymentSuccess = processGcashPayment(mobileNumber, pin, amount);
+
+        
+        if (paymentSuccess) {
+            System.out.println("Payment successful. Amount: " + amount);
+        } else {
+            System.out.println("Payment failed. Please try again.");
         }
-
-        scanner.close();
     }
 
-    private static void performOption1() {
-        System.out.println("Enter your Gcash Acc: ");
-        System.out.println("Enter Amount: ");
+    private static boolean processGcashPayment(String mobileNumber, String pin, double amount) {
+        
+        if (mobileNumber.equals("09613509942") && pin.equals("1234")) {
+            return true;
        
-    }
-
-    private static void performOption2() {
-        System.out.println("Enter Paymaya Acc");
-        System.out.println("Enter Amount ");
-       
-    }
-
-    private static void performOption3() {
-        System.out.println("Enter Acc");
-        System.out.println("Enter Amount");
-    
+           
+        } else {
+            return false;
+        }
     }
 }
