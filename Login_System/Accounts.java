@@ -20,5 +20,9 @@ import java.util.HashMap;
 	public HashMap getLoginInfo(){
 		return logininfo;
 	}
+	
+	public void display() {
+		
+	}
 }
 
