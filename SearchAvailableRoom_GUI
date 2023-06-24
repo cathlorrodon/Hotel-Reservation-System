@@ -1,0 +1,160 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class RoomReservation extends JFrame implements ActionListener {
+
+    private JButton showAvailableRoomButton;
+    private JButton viewReservedRoomButton;
+    private JPanel mainPanel;
+    private JPanel buttonPanel;
+    private JPanel availableRoomsPanel;
+    private JPanel reservedRoomsPanel;
+    private List<String> reservedRooms;
+    private Map<String, String> roomTypes;
+    private Map<String, String> amenities;
+    private String selectedRoom;
+
+    public RoomReservation() {
+        setTitle("HOTEL GOSO");
+        setSize(650, 550);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JLabel welcomeLabel = new JLabel("Welcome to HOTEL GOSO, where comfort embraces you like a warm, familiar hug.");
+        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        add(welcomeLabel, BorderLayout.NORTH);
+        
+        JLabel welcome2Label = new JLabel("Where guests become cherished family.");
+        welcome2Label.setHorizontalAlignment(SwingConstants.CENTER);
+        add(welcome2Label, BorderLayout.SOUTH);
+
+        showAvailableRoomButton = new JButton("Show Available Rooms");
+        viewReservedRoomButton = new JButton("View Reserved Rooms");
+
+        buttonPanel = new JPanel(new GridLayout(1, 1));
+        buttonPanel.add(showAvailableRoomButton);
+        buttonPanel.add(viewReservedRoomButton);
+
+        showAvailableRoomButton.addActionListener(this);
+        viewReservedRoomButton.addActionListener(this);
+
+        mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(buttonPanel, BorderLayout.CENTER);
+
+        availableRoomsPanel = new JPanel(new GridLayout(11, 5));
+        reservedRoomsPanel = new JPanel(new GridLayout(11, 5));
+
+        reservedRooms = new ArrayList<>();
+
+        roomTypes = new HashMap<>();
+        roomTypes.put("STANDARD", "Room 1-10");
+        roomTypes.put("DELUXE", "Room 11-20");
+        roomTypes.put("SUITE", "Room 21-30");
+        roomTypes.put("EXECUTIVE", "Room 31-40");
+        roomTypes.put("PREMIUM", "Room 41-50");
+        roomTypes.put("PENTHOUSE", "Room 51-55");
+
+        amenities = new HashMap<>();
+        amenities.put("STANDARD", "It includes a bed, a private bathroom, a desk, and basic furniture.");
+        amenities.put("DELUXE", "It includes a larger bed, a seating area, a work desk, and upgraded furnishings.");
+        amenities.put("SUITE", "It includes additional amenities like a kitchenette, a dining table, and a private balcony. \nSuites are ideal for guests seeking more space and privacy.");
+        amenities.put("EXECUTIVE", "Designed for business travelers, executive rooms are equipped with features to facilitate work-related activities. \nThey often include a spacious work desk, ergonomic chair, enhanced lighting, \nand extra connectivity options such as high-speed internet access.");
+        amenities.put("PREMIUM", "Consists of two or more separate rooms with a connecting door, allowing guests to move between them without having to go through the hallway. \nThey are suitable for families or groups who prefer the convenience of staying close together.");
+        amenities.put("PENTHOUSE", "The pinnacle of luxury, a penthouse suite is located on the top floor of a hotel and offers panoramic views. \nIt typically features multiple bedrooms, a spacious living area, a fully equipped kitchen, a private terrace or balcony, \nand exclusive services such as a dedicated concierge.");
+
+        add(mainPanel, BorderLayout.CENTER);
+
+        setVisible(true);
+    }
+
+    private void displayAvailableRooms() {
+        availableRoomsPanel.removeAll();
+
+        for (int i = 1; i <= 55; i++) {
+            String roomType = getRoomType(i);
+            String roomInfo = "Room " + i + " (" + roomType + ")";
+            JButton roomButton = new JButton(roomInfo);
+            roomButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    selectedRoom = roomInfo;
+                    showRoomInformation(roomType);
+                }
+            });
+            availableRoomsPanel.add(roomButton);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(availableRoomsPanel);
+
+        JOptionPane.showMessageDialog(this, scrollPane, "Available Rooms", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void displayReservedRooms() {
+        reservedRoomsPanel.removeAll();
+
+        for (String room : reservedRooms) {
+            JLabel roomLabel = new JLabel("Reserved Room " + room);
+            reservedRoomsPanel.add(roomLabel);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(reservedRoomsPanel);
+
+        JOptionPane.showMessageDialog(this, scrollPane, "Reserved Rooms", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void reserveRoom(String roomNumber) {
+        if (reservedRooms.contains(roomNumber)) {
+            JOptionPane.showMessageDialog(this, "Room " + roomNumber + " is already reserved.", "Reservation Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            reservedRooms.add(roomNumber);
+            JOptionPane.showMessageDialog(this, "Reservation created for Room " + roomNumber, "Reservation Confirmation", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void showRoomInformation(String roomType) {
+        String roomAmenities = amenities.get(roomType);
+        int option = JOptionPane.showOptionDialog(this, "Room Type: " + roomType + "\nAmenities: " + roomAmenities, "Room Information", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[]{"Back", "RESERVE THIS ROOM"}, "Back");
+        if (option == 1) {
+            reserveRoom(selectedRoom);
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == showAvailableRoomButton) {
+            displayAvailableRooms();
+        } else if (e.getSource() == viewReservedRoomButton) {
+            displayReservedRooms();
+        }
+    }
+
+    private String getRoomType(int roomNumber) {
+        if (roomNumber >= 1 && roomNumber <= 10) {
+            return "STANDARD";
+        } else if (roomNumber >= 11 && roomNumber <= 20) {
+            return "DELUXE";
+        } else if (roomNumber >= 21 && roomNumber <= 30) {
+            return "SUITE";
+        } else if (roomNumber >= 31 && roomNumber <= 40) {
+            return "EXECUTIVE";
+        } else if (roomNumber >= 41 && roomNumber <= 50) {
+            return "PREMIUM";
+        } else if (roomNumber >= 51 && roomNumber <= 55) {
+            return "PENTHOUSE";
+        } else {
+            return "Not available";
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new RoomReservation();
+            }
+        });
+    }
+}
