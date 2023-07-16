@@ -11,10 +11,12 @@ public class RoomReservation extends JFrame implements ActionListener {
 
     private JButton showAvailableRoomButton;
     private JButton viewReservedRoomButton;
+    private JButton paymentOptionsButton;
     private JPanel mainPanel;
     private JPanel buttonPanel;
     private JPanel availableRoomsPanel;
     private JPanel reservedRoomsPanel;
+    private JPanel paymentPanel;
     private List<String> reservedRooms;
     private Map<String, String> roomTypes;
     private Map<String, String> amenities;
@@ -35,19 +37,24 @@ public class RoomReservation extends JFrame implements ActionListener {
 
         showAvailableRoomButton = new JButton("Show Available Rooms");
         viewReservedRoomButton = new JButton("View Reserved Rooms");
+        paymentOptionsButton = new JButton("Pay Here");
 
         buttonPanel = new JPanel(new GridLayout(1, 1));
         buttonPanel.add(showAvailableRoomButton);
         buttonPanel.add(viewReservedRoomButton);
+        buttonPanel.add(paymentOptionsButton);
 
         showAvailableRoomButton.addActionListener(this);
         viewReservedRoomButton.addActionListener(this);
+        paymentOptionsButton.addActionListener(this);
 
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
 
         availableRoomsPanel = new JPanel(new GridLayout(11, 5));
         reservedRoomsPanel = new JPanel(new GridLayout(11, 5));
+        paymentPanel = new JPanel(new GridLayout(11, 5));
+        
 
         reservedRooms = new ArrayList<>();
 
@@ -122,6 +129,8 @@ public class RoomReservation extends JFrame implements ActionListener {
             reserveRoom(selectedRoom);
         }
     }
+    
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -146,7 +155,7 @@ public class RoomReservation extends JFrame implements ActionListener {
         } else if (roomNumber >= 51 && roomNumber <= 55) {
             return "PENTHOUSE";
         } else {
-            return "NO ROOMS AVAILABLE";
+            return "Not available";
         }
     }
 
