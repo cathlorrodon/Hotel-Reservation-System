@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +25,7 @@ public class RoomReservation extends JFrame implements ActionListener {
     private Map<String, String> roomTypes;
     private Map<String, String> amenities;
     private Map<String, Double> roomPrices;
-    private String selectedRoom;
+    private String selectedRoom; 
 
     public RoomReservation() {
         setTitle("HOTEL GOSO");
@@ -88,7 +91,24 @@ public class RoomReservation extends JFrame implements ActionListener {
         add(mainPanel, BorderLayout.CENTER);
 
         setVisible(true);
+        
+        
+        //------ DATABASE CONNECTOR ------
+        try {
+            String url = "jdbc:mysql://localhost:3306/hotel_goso";
+            String username = "root";
+            String password = "password123";
+            connection = DriverManager.getConnection(url, username, password);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to connect to the database.", "Database Connection Error", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
     }
+    
+    private Connection connection;
+    
+    
 
     // --------------------------------- SHOW AVAILABLE ROOMS --------------------------------
     private void displayAvailableRooms() {
@@ -155,6 +175,30 @@ public class RoomReservation extends JFrame implements ActionListener {
     }
 
     private void reserveRoom(String roomNumber) {
+        if (reservedRooms.contains(roomNumber)) {
+            JOptionPane.showMessageDialog(this, "Room " + roomNumber + " is already reserved.", "Reservation Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            String roomType = getRoomType(Integer.parseInt(roomNumber.substring(5)));
+            double roomPrice = roomPrices.get(roomType);
+
+            // Insert the reserved room details into the database
+            try {
+                String insertSQL = "INSERT INTO reservations (room_number, room_type, room_price, amenities) VALUES (?, ?, ?, ?)";
+                PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
+                preparedStatement.setString(1, roomNumber);
+                preparedStatement.setString(2, roomType);
+                preparedStatement.setDouble(3, roomPrice);
+                preparedStatement.setString(4, amenities.get(roomType));
+                preparedStatement.executeUpdate();
+
+                // Update the UI and inform the user about the successful reservation
+                reservedRooms.add(roomNumber);
+                JOptionPane.showMessageDialog(this, "Reservation created for: " + roomNumber + "\nRoom Type: " + roomType + "\nPrice: ₱" + roomPrice, "Reservation Confirmation", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Failed to reserve the room. Please try again.", "Reservation Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
         if (reservedRooms.contains(roomNumber)) {
             JOptionPane.showMessageDialog(this, "Room " + roomNumber + " is already reserved.", "Reservation Error", JOptionPane.ERROR_MESSAGE);
         } else {
@@ -289,6 +333,10 @@ public class RoomReservation extends JFrame implements ActionListener {
             String roomNumber = e.getActionCommand();
             removeReservation(roomNumber);
         }
+        
+    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new RoomReservation());
     }
 
 }
