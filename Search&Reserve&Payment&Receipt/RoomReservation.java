@@ -16,48 +16,104 @@ public class RoomReservation extends JFrame implements ActionListener {
     private JButton viewReservedRoomButton;
     private JButton payButton;
     private JButton logoutButton;
-    private JPanel mainPanel;
-    private JPanel buttonPanel;
-    private JPanel availableRoomsPanel;
-    private JPanel reservedRoomsPanel;
+   private JPanel mainPanel;
+   private JPanel buttonPanel;
+   private JPanel availableRoomsPanel;
+   private JPanel reservedRoomsPanel;
+   private JLabel welcomeLabel, text, welcomeLabel2;
 
     private List<String> reservedRooms;
     private Map<String, String> roomTypes;
     private Map<String, String> amenities;
     private Map<String, Double> roomPrices;
-    private String selectedRoom; 
+    private String selectedRoom;
+    ImageIcon icon;
 
     public RoomReservation() {
-        setTitle("HOTEL GOSO");
+        setTitle("HOTEL RESERVATION SYSTEM");
         setSize(800, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+         
+        icon = new ImageIcon("image/icon.png");
+        setIconImage(icon.getImage());
+        
+        
+       
 
-        JLabel welcomeLabel = new JLabel("Welcome to HOTEL GOSO, where comfort embraces you like a warm, familiar hug.\n Where guests become cherished family.");
-        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        add(welcomeLabel, BorderLayout.NORTH);
+     JLabel welcomeLabel = new JLabel("Welcome to GoSo Hotel ");
+    welcomeLabel.setFont(new Font("Bradley Hand ITC", Font.BOLD, 48));
+    welcomeLabel.setBounds(50, 65, 600, 50);
+    welcomeLabel.setForeground(new Color(0,102,102));
+    add(welcomeLabel);
+       
+    
+    JLabel welcomeLabel2 = new JLabel("Where comfort embraces you like a warm, familiar hug and where guests become cherished family.");
+    welcomeLabel2.setFont(new Font("Serif",Font.BOLD, 14));
+    welcomeLabel2.setBounds(50, 100, 700, 50);
+    welcomeLabel2.setForeground(Color.BLACK);
+     add(welcomeLabel2);
+
+
+        
+       
+        JPanel buttonPanelContainer = new JPanel(null);
+       
+       mainPanel = new JPanel(new BorderLayout());
+
+       
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // Add padding between buttons
 
         showAvailableRoomButton = new JButton("Show Available Rooms");
-        viewReservedRoomButton = new JButton("View Reserved Rooms");
-        payButton = new JButton("Pay for Reserved Room");
-        logoutButton = new JButton("Logout");
-
-        buttonPanel = new JPanel(new GridLayout(2, 2, 10, 10));
-        buttonPanel.add(showAvailableRoomButton);
-        buttonPanel.add(viewReservedRoomButton); // Adding viewReservedRoomButton to the buttonPanel
-        buttonPanel.add(payButton);
-        buttonPanel.add(logoutButton);
-
+        showAvailableRoomButton.setFont(new Font("Lucida Bright", Font.BOLD, 14));
+        showAvailableRoomButton.setFocusable(false);
         showAvailableRoomButton.addActionListener(this);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        buttonPanelContainer.add(showAvailableRoomButton, gbc);
+        buttonPanelContainer.add(showAvailableRoomButton);
+        showAvailableRoomButton.setBounds(25, 260, 400, 40);
+         buttonPanelContainer.add(showAvailableRoomButton);
+  
+
+
+        viewReservedRoomButton = new JButton("View Reserved Rooms");
+        viewReservedRoomButton.setFont(new Font("Lucida Bright", Font.BOLD, 14));
+        viewReservedRoomButton.setFocusable(false);
         viewReservedRoomButton.addActionListener(this);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        buttonPanelContainer.add(viewReservedRoomButton, gbc);
+        buttonPanelContainer.add(viewReservedRoomButton);
+        viewReservedRoomButton.setBounds(25, 310, 400, 40); 
+
+
+        payButton = new JButton("Pay here ");
+        payButton.setFont(new Font("Lucida Bright", Font.BOLD, 14));
+        payButton.setFocusable(false);
         payButton.addActionListener(this);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        buttonPanelContainer.add(payButton, gbc);
+       buttonPanelContainer.add(payButton);
+        payButton.setBounds(25, 360, 400, 40);
+        
+        reservedRoomsPanel = new JPanel(new GridLayout(0, 1));
+        JScrollPane reservedRoomsScrollPane = new JScrollPane(reservedRoomsPanel);
+        mainPanel.add(reservedRoomsScrollPane, BorderLayout.CENTER);
+ 
+        logoutButton = new JButton("Logout");
+        logoutButton.setFont(new Font("Lucida Bright", Font.BOLD, 16));
+        logoutButton.setFocusable(false);
         logoutButton.addActionListener(this);
-
-        mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(welcomeLabel, BorderLayout.NORTH);
-        mainPanel.add(buttonPanel, BorderLayout.CENTER);
-
-        availableRoomsPanel = new JPanel(new GridLayout(11, 5, 5, 5));
-        reservedRoomsPanel = new JPanel(new GridLayout(11, 5, 5, 5));
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        buttonPanelContainer.add(logoutButton, gbc);
+        buttonPanelContainer.add(logoutButton);
+        logoutButton.setBounds(500,500, 200, 40);
+       
+       mainPanel.add(buttonPanelContainer, BorderLayout.CENTER);
 
         reservedRooms = new ArrayList<>();
 
@@ -88,11 +144,9 @@ public class RoomReservation extends JFrame implements ActionListener {
         roomPrices.put("PREMIUM", 6500.0);
         roomPrices.put("PENTHOUSE", 7500.0);
 
-        add(mainPanel, BorderLayout.CENTER);
-
+       add(mainPanel, BorderLayout.CENTER);
         setVisible(true);
-        
-        
+
         //------ DATABASE CONNECTOR ------
         try {
             String url = "jdbc:mysql://localhost:3306/hotel_goso";
@@ -222,11 +276,14 @@ public class RoomReservation extends JFrame implements ActionListener {
             JButton removeButton = new JButton("Remove");
             removeButton.setActionCommand(room);
             removeButton.addActionListener(this);
+            //reservedRoomsPanel.add(roomPanel);
 
             JPanel roomPanel = new JPanel(new BorderLayout());
             roomPanel.add(roomLabel, BorderLayout.CENTER);
             roomPanel.add(removeButton, BorderLayout.EAST);
             reservedRoomsPanel.add(roomPanel);
+            JScrollPane scrollPane = new JScrollPane(reservedRoomsPanel);
+            JOptionPane.showMessageDialog(this, scrollPane, "Reserved Rooms", JOptionPane.PLAIN_MESSAGE);
         }
 
         JScrollPane scrollPane = new JScrollPane(reservedRoomsPanel);
