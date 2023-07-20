@@ -12,9 +12,11 @@ import java.util.HashMap;
 	
 	protected Accounts(){
 		
-		logininfo.put("name001","password01");
-		logininfo.put("name002","password02");
-		logininfo.put("name003","password03");
+		logininfo.put("ODON","admin01");
+                logininfo.put("BATACANDOLO","admin01");
+                logininfo.put("ODGIEN","admin01");
+                logininfo.put("VILLANUEVA","admin01");
+                logininfo.put("PASTOR","admin01");
 	}
 	
 	public HashMap getLoginInfo(){
