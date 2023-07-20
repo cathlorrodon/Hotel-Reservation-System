@@ -23,6 +23,7 @@ public class LoginPage extends Main implements ActionListener{
 	JLabel messageLabel = new JLabel();
 	HashMap<String,String> logininfo = new HashMap<>();
 	
+        Main.websitePage wp = new Main.websitePage();
         
 	LoginPage(HashMap<String,String> loginInfoParent){
             
@@ -75,11 +76,12 @@ public class LoginPage extends Main implements ActionListener{
 			String password = String.valueOf(userPasswordField.getPassword());
 			
 			if(logininfo.containsKey(userID)) {
-				if(logininfo.get(userID).equals(password)) {
+				if(logininfo.get(userID).equals(password)) 
+                                {
 					messageLabel.setForeground(Color.green);
 					messageLabel.setText("Login successful");
 					frame.dispose();
-					websitePage mainPage = new websitePage(userID);
+					wp.registrationHP();
 				}
 				else {
 					messageLabel.setForeground(Color.red);
