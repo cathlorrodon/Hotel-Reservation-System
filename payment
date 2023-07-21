@@ -1,0 +1,44 @@
+private void payForReservedRoom() {
+        if (reservedRooms.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No reserved rooms found. Please reserve a room first.",
+                    "No Reserved Rooms", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String[] paymentMethods = {"Credit Card", "Debit Card", "PayPal", "Bank Transfer", "Over the Counter"};
+        String selectedPaymentMethod = (String) JOptionPane.showInputDialog(this, "Select Payment Method:",
+                "Available Payment Methods", JOptionPane.PLAIN_MESSAGE, null, paymentMethods, paymentMethods[0]);
+
+        if (selectedPaymentMethod != null) {
+            if (selectedPaymentMethod.equals("Over the Counter")) {
+                String paymentAmountString = JOptionPane.showInputDialog(this, "Enter payment amount for the reserved room:", "Payment Amount", JOptionPane.PLAIN_MESSAGE);
+                if (paymentAmountString != null && !paymentAmountString.isEmpty()) {
+                    double paymentAmount = Double.parseDouble(paymentAmountString);
+                    String roomNumber = reservedRooms.get(reservedRooms.size() - 1);
+                    double roomPrice = roomPrices.get(getRoomType(Integer.parseInt(roomNumber.substring(5))));
+                    if (paymentAmount >= roomPrice) {
+                        double change = paymentAmount - roomPrice;
+                        JOptionPane.showMessageDialog(this, "Payment successful! \n " + roomNumber + " has been paid for. "
+                                + "\n Amount: ₱" + roomPrice
+                                + "\n Change: ₱" + change,
+                                "Payment Confirmation", JOptionPane.INFORMATION_MESSAGE);
+
+                        displayReceipt(roomNumber, roomPrice); // 
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Payment amount is insufficient. Please enter the full amount.",
+                                "Insufficient Payment", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Payment amount cannot be empty. Please try again.",
+                            "Invalid Payment Amount", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                String roomNumber = reservedRooms.get(reservedRooms.size() - 1);
+                double roomPrice = roomPrices.get(getRoomType(Integer.parseInt(roomNumber.substring(5))));
+                JOptionPane.showMessageDialog(this, "Payment successful! \n " + roomNumber + " has been paid for." + "\n Amount: ₱" + roomPrice,
+                        "Payment Confirmation", JOptionPane.INFORMATION_MESSAGE);
+
+                displayReceipt(roomNumber, roomPrice);
+            }
+        }
+    }
