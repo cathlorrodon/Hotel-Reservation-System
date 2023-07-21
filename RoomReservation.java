@@ -2,15 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.ImageIcon;
 
 public class RoomReservation extends JFrame implements ActionListener {
+    
 
     private JButton showAvailableRoomButton;
     private JButton viewReservedRoomButton;
@@ -98,11 +97,9 @@ public class RoomReservation extends JFrame implements ActionListener {
         buttonPanelContainer.add(payButton, gbc);
        buttonPanelContainer.add(payButton);
         payButton.setBounds(25, 360, 400, 40);
-        
-        reservedRoomsPanel = new JPanel(new GridLayout(0, 1));
-        JScrollPane reservedRoomsScrollPane = new JScrollPane(reservedRoomsPanel);
-        mainPanel.add(reservedRoomsScrollPane, BorderLayout.CENTER);
  
+        
+
         logoutButton = new JButton("Logout");
         logoutButton.setFont(new Font("Lucida Bright", Font.BOLD, 16));
         logoutButton.setFocusable(false);
@@ -146,23 +143,8 @@ public class RoomReservation extends JFrame implements ActionListener {
 
        add(mainPanel, BorderLayout.CENTER);
         setVisible(true);
-
-        //------ DATABASE CONNECTOR ------
-        try {
-            String url = "jdbc:mysql://localhost:3306/hotel_goso";
-            String username = "root";
-            String password = "password123";
-            connection = DriverManager.getConnection(url, username, password);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Failed to connect to the database.", "Database Connection Error", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        }
+       
     }
-    
-    private Connection connection;
-    
-    
 
     // --------------------------------- SHOW AVAILABLE ROOMS --------------------------------
     private void displayAvailableRooms() {
@@ -235,30 +217,6 @@ public class RoomReservation extends JFrame implements ActionListener {
             String roomType = getRoomType(Integer.parseInt(roomNumber.substring(5)));
             double roomPrice = roomPrices.get(roomType);
 
-            // Insert the reserved room details into the database
-            try {
-                String insertSQL = "INSERT INTO reservations (room_number, room_type, room_price, amenities) VALUES (?, ?, ?, ?)";
-                PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
-                preparedStatement.setString(1, roomNumber);
-                preparedStatement.setString(2, roomType);
-                preparedStatement.setDouble(3, roomPrice);
-                preparedStatement.setString(4, amenities.get(roomType));
-                preparedStatement.executeUpdate();
-
-                // Update the UI and inform the user about the successful reservation
-                reservedRooms.add(roomNumber);
-                JOptionPane.showMessageDialog(this, "Reservation created for: " + roomNumber + "\nRoom Type: " + roomType + "\nPrice: ₱" + roomPrice, "Reservation Confirmation", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Failed to reserve the room. Please try again.", "Reservation Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-        if (reservedRooms.contains(roomNumber)) {
-            JOptionPane.showMessageDialog(this, "Room " + roomNumber + " is already reserved.", "Reservation Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            String roomType = getRoomType(Integer.parseInt(roomNumber.substring(5)));
-            double roomPrice = roomPrices.get(roomType);
-
             reservedRooms.add(roomNumber);
             JOptionPane.showMessageDialog(this, "Reservation created for: " + roomNumber + "\nRoom Type: " + roomType + "\nPrice: ₱" + roomPrice, "Reservation Confirmation", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -276,14 +234,11 @@ public class RoomReservation extends JFrame implements ActionListener {
             JButton removeButton = new JButton("Remove");
             removeButton.setActionCommand(room);
             removeButton.addActionListener(this);
-            //reservedRoomsPanel.add(roomPanel);
 
             JPanel roomPanel = new JPanel(new BorderLayout());
             roomPanel.add(roomLabel, BorderLayout.CENTER);
             roomPanel.add(removeButton, BorderLayout.EAST);
             reservedRoomsPanel.add(roomPanel);
-            JScrollPane scrollPane = new JScrollPane(reservedRoomsPanel);
-            JOptionPane.showMessageDialog(this, scrollPane, "Reserved Rooms", JOptionPane.PLAIN_MESSAGE);
         }
 
         JScrollPane scrollPane = new JScrollPane(reservedRoomsPanel);
@@ -390,10 +345,6 @@ public class RoomReservation extends JFrame implements ActionListener {
             String roomNumber = e.getActionCommand();
             removeReservation(roomNumber);
         }
-        
-    }
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new RoomReservation());
     }
 
 }

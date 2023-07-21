@@ -1,0 +1,10 @@
+CREATE DATABASE hotel_goso;
+USE hotel_goso;
+CREATE TABLE reservations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    room_number VARCHAR(20) NOT NULL,
+    room_type VARCHAR(20) NOT NULL,
+    amenities TEXT NOT NULL,
+    room_price DOUBLE NOT NULL,
+    reservation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
