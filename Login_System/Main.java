@@ -59,15 +59,27 @@ public class Main {
         reserveButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                String reservationNo = JOptionPane.showInputDialog("Enter Reservation No.:");
-                String fullName = JOptionPane.showInputDialog("Full Name: ");
+                int reservationNo = Integer.parseInt(JOptionPane.showInputDialog("Enter Reservation No.:"));
+                String fullName = JOptionPane.showInputDialog("Enter Full Name: ");
+                int fnLenght = fullName.length();
                 String roomType = JOptionPane.showInputDialog("Enter Room Type:");
+                int rtLenght = roomType.length();
                 String contactNo = JOptionPane.showInputDialog("Enter Contact no. :");
+                int cnLenght = contactNo.length();
                 String email = JOptionPane.showInputDialog("Enter Email:");
+                int eLenght = email.length();
                 String checkIn = ""+LocalDateTime.now();
                 String checkOut = JOptionPane.showInputDialog("Enter Check-Out:");
+                int coLenght = checkOut.length();
                 tableModel.addRow(new Object[]{ reservationNo, fullName, roomType, contactNo, email, checkIn, checkOut});
-                        
+                
+                if (reservationNo <= 0){JOptionPane.showMessageDialog(reserveButton, "Reservation Number should not be null");}
+                else if (fnLenght == 0) {JOptionPane.showMessageDialog(reserveButton, "Full Name should not be null");}
+                else if (rtLenght == 0){JOptionPane.showMessageDialog(reserveButton, "Room Type should not be null");}
+                else if (cnLenght != 11){JOptionPane.showMessageDialog(reserveButton, "Contact should be eleven digits");}
+                else if (eLenght == 0){JOptionPane.showMessageDialog(reserveButton, "Email should not be null");}
+                else if (coLenght == 0){JOptionPane.showMessageDialog(reserveButton, "Check-Out Time should not be null");}
+                else {
                 try {
                     Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/HRS", "root", "balaguer");
 
@@ -80,6 +92,7 @@ public class Main {
                     else {JOptionPane.showMessageDialog(reserveButton, "Success!");}
                 }
                 catch (Exception exception) {}
+            }
             }
         });
         buttonPanel.add(reserveButton);
